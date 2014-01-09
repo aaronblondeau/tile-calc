@@ -1,0 +1,36 @@
+{
+  "name": "tilelogic",
+  "description": "Glob expressions for JavaScript",
+  "keywords": [
+    "map",
+    "tile",
+    "open street map",
+    "leaflet"
+  ],
+  "version": "0.1.0",
+  "homepage": "https://github.com/aaronblondeau/tilelogic",
+  "author": "Aaron Blondeau (http://www.salidasoftware.com/)",
+  "contributors": [],
+  "license": "MIT",
+  "dependencies": {},
+  "main": "tilelogic.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aaronblondeau/tilelogic.git"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "tilelogic.js"
+  ],
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine-node ./test",
+    "build": "uglifyjs tilelogic.js -c 'evaluate=false' --comments '/ Copyright .*/' -m --source-map tilelogic-min.map -o tilelogic-min.js"
+  },
+  "devDependencies": {
+    "jasmine-node": "~1.12.0"
+  }
+}
