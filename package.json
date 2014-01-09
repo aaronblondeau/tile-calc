@@ -1,6 +1,6 @@
 {
   "name": "tilelogic",
-  "description": "Glob expressions for JavaScript",
+  "description": "JavaScript functions for working with map tiles.",
   "keywords": [
     "map",
     "tile",
