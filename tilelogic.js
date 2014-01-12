@@ -55,14 +55,33 @@
 			if(z < max_z) {
 				var children = this.getChildTiles(x, y, z);
 				result = result.concat(children);
+				var result_length = result.length;
 				// add children to array
-				for(var i = 0; i < result.length; i++){
+				for(var i = 0; i < result_length; i++){
 					var child = result[i];
 					var grandchildren = this.getAllDescendantTiles(child[0], child[1], child[2], max_z);
 					result = result.concat(grandchildren);
 				}
 			}
 			return result;
+		},
+
+		//TODO : use "yield" in the future instead of a callback
+		generateAllDescendantTiles: function(x, y, z, max_z, callback) {
+
+			if(typeof max_z == "undefined") {
+				max_z = z + 1;
+			}
+
+			if(z < max_z) {
+				var children = this.getChildTiles(x, y, z);
+				var children_length = children.length;
+				for(var i = 0; i < children_length; i++){
+					callback(children[i]);
+					var child = children[i];
+					this.generateAllDescendantTiles(child[0], child[1], child[2], max_z, callback);
+				}
+			}
 		},
 
 		getAllAncestorTiles: function(x, y, z, min_z) {
@@ -82,6 +101,22 @@
 			return result;
 		},
 
+		//TODO : use "yield" in the future instead of a callback
+		generateAllAncestorTiles: function(x, y, z, min_z, callback) {
+
+			if((typeof min_z == "undefined") || (min_z < 0)){
+				min_z = 0;
+			}
+
+			while(z > min_z){
+				var parent = this.getParentTile(x, y, z);
+				callback(parent);
+				x = parent[0];
+				y = parent[1];
+				z = parent[2];
+			}
+		},
+
 		getAllRelatedTiles: function(x, y, z, min_z, max_z) {
 
 			var me = [[x, y, z]];
@@ -91,6 +126,12 @@
 			result = result.concat(me);
 			result = result.concat(descendants);
 			return result;
+		},
+
+		generateAllRelatedTiles: function(x, y, z, min_z, max_z, callback) {
+			this.generateAllAncestorTiles(x, y, z, min_z, callback);
+			callback([x, y, z]);
+			this.generateAllDescendantTiles(x, y, z, max_z, callback);
 		}
 
 	};

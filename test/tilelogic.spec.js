@@ -12,4 +12,152 @@ describe('tilelogic', function(){
     expect( tilelogic.tile2lat(6288, 14).toFixed(6) ).toBe((38.548165).toFixed(6));
   })
 
+  it('tile bounds are correct', function(){
+  	bounds = tilelogic.getTileBounds(3368, 6288, 14);
+    expect(bounds[0].toFixed(6) ).toBe((-105.99609375).toFixed(6));
+    expect(bounds[1].toFixed(6) ).toBe((38.54816542304658).toFixed(6));
+    expect(bounds[2].toFixed(6) ).toBe((-105.97412109375).toFixed(6));
+    expect(bounds[3].toFixed(6) ).toBe((38.53097889440025).toFixed(6));
+  })
+
+  it('child tiles are correct', function(){
+  	bounds = tilelogic.getChildTiles(3368, 6288, 14);
+    expect(bounds[0]+"").toBe("6736,12576,15");
+    expect(bounds[1]+"").toBe("6737,12576,15");
+    expect(bounds[2]+"").toBe("6736,12577,15");
+    expect(bounds[3]+"").toBe("6737,12577,15");
+  })
+
+  it('parent tile is correct', function(){
+  	parent = tilelogic.getParentTile(3368, 6288, 14);
+    expect(parent+"").toBe("1684,3144,13");
+  })
+
+  it('tile from bounds in hemisphere 1,1 is correct', function(){
+  	tile = tilelogic.getTile(60.19206,24.968748, 14);
+    expect(tile+"").toBe("9328,4740,14");
+  })
+
+  it('tile from bounds in hemisphere 1,-1 is correct', function(){
+  	tile = tilelogic.getTile(38.539573,-105.999237, 14);
+    expect(tile+"").toBe("3367,6288,14");
+  })
+
+  it('tile from bounds in hemisphere -1,1 is correct', function(){
+  	tile = tilelogic.getTile(-20.263566,57.506634, 14);
+    expect(tile+"").toBe("10809,9134,14");
+  })
+
+	it('tile from bounds in hemisphere -1,-1 is correct', function(){
+  	tile = tilelogic.getTile(-53.146564,-70.910279, 14);
+    expect(tile+"").toBe("4964,11057,14");
+  })  
+
+	it('descendant tiles with no max depth parameter are correct', function(){
+  	tiles = tilelogic.getAllDescendantTiles(3368, 6288, 14);
+    expect(tiles.length).toBe(4);
+    expect(tiles[3]+"").toBe("6737,12577,15");
+  })
+
+  it('descendant tiles with max depth parameter are correct', function(){
+  	tiles = tilelogic.getAllDescendantTiles(3368, 6288, 14, 16);
+    expect(tiles.length).toBe(20);
+    expect(tiles[19]+"").toBe("13475,25155,16");
+  })
+
+  it('no descendant tiles with invalid max depth', function(){
+  	tiles = tilelogic.getAllDescendantTiles(3368, 6288, 14, -1);
+    expect(tiles.length).toBe(0);
+  })
+
+  it('ancestor tiles with no min depth parameter are correct', function(){
+  	tiles = tilelogic.getAllAncestorTiles(3368, 6288, 14);
+    expect(tiles.length).toBe(14);
+    expect(tiles[0]+"").toBe("1684,3144,13");
+    expect(tiles[13]+"").toBe("0,0,0");
+  })
+
+  it('ancestor tiles with min depth parameter are correct', function(){
+  	tiles = tilelogic.getAllAncestorTiles(3368, 6288, 14, 5);
+    expect(tiles.length).toBe(9);
+    expect(tiles[0]+"").toBe("1684,3144,13");
+    expect(tiles[8]+"").toBe("6,12,5");
+  })
+  
+  it('no ancestor tiles with invalid min depth', function(){
+  	tiles = tilelogic.getAllAncestorTiles(3368, 6288, 14, 15);
+    expect(tiles.length).toBe(0);
+  })
+
+  it('related tiles with no min or max depth parameter are correct', function(){
+  	tiles = tilelogic.getAllRelatedTiles(3368, 6288, 14);
+    expect(tiles.length).toBe(19);
+    expect(tiles[0]+"").toBe("0,0,0");
+    expect(tiles[18]+"").toBe("6737,12577,15");
+  })
+
+  it('related tiles with min and max depth parameter are correct', function(){
+  	tiles = tilelogic.getAllRelatedTiles(3368, 6288, 14, 5, 16);
+    expect(tiles.length).toBe(30);
+    expect(tiles[0]+"").toBe("6,12,5");
+    expect(tiles[29]+"").toBe("13475,25155,16");
+  })
+
+  it('related tiles with invalid min and max depth parameter are correct', function(){
+  	tiles = tilelogic.getAllRelatedTiles(3368, 6288, 14, 15, 13);
+    expect(tiles.length).toBe(1);
+    expect(tiles[0]+"").toBe("3368,6288,14");
+  })
+
+  it('can generate descendant tiles', function(){
+  	var processor = {
+      processTile: function(value) {
+      }
+    };
+    spyOn(processor, 'processTile');
+  	tilelogic.generateAllDescendantTiles(3368, 6288, 14, 16, processor.processTile);
+  	//till node-jasmine gets to 2.0 we can't do these test on node
+  	if(typeof processor.processTile.calls.count == "function"){
+    	expect(processor.processTile.calls.count()).toEqual(20);
+    	expect(processor.processTile.calls.argsFor(19)+"").toBe("13475,25155,16");
+  	}
+  	else{
+  		console.log("spy.calls.count assertions not run!");
+  	}
+  })
+
+  it('can generate ancestor tiles', function(){
+  	var processor = {
+      processTile: function(value) {
+      }
+    };
+    spyOn(processor, 'processTile');
+  	tilelogic.generateAllAncestorTiles(3368, 6288, 14, 0, processor.processTile);
+  	//till node-jasmine gets to 2.0 we can't do these test on node
+  	if(typeof processor.processTile.calls.count == "function"){
+	    expect(processor.processTile.calls.count()).toEqual(14);
+	    expect(processor.processTile.calls.argsFor(0)+"").toBe("1684,3144,13");
+	    expect(processor.processTile.calls.argsFor(13)+"").toBe("0,0,0");
+    }
+  	else{
+  		console.log("spy.calls.count assertions not run!");
+  	}
+  })
+
+  it('can generate related tiles', function(){
+  	var processor = {
+      processTile: function(value) {
+      }
+    };
+    spyOn(processor, 'processTile');
+  	tilelogic.generateAllRelatedTiles(3368, 6288, 14, 5, 16, processor.processTile);
+  	//till node-jasmine gets to 2.0 we can't do these test on node
+  	if(typeof processor.processTile.calls.count == "function"){
+    	expect(processor.processTile.calls.count()).toEqual(30);
+    }
+  	else{
+  		console.log("spy.calls.count assertions not run!");
+  	}
+  })
+
 })
