@@ -33,25 +33,39 @@ describe('tilelogic', function(){
     expect(parent+"").toBe("1684,3144,13");
   })
 
-  it('tile from bounds in hemisphere 1,1 is correct', function(){
+  it('tile from lat lng in hemisphere 1,1 is correct', function(){
   	tile = tilelogic.getTile(60.19206,24.968748, 14);
     expect(tile+"").toBe("9328,4740,14");
   })
 
-  it('tile from bounds in hemisphere 1,-1 is correct', function(){
+  it('tile from lat lng in hemisphere 1,-1 is correct', function(){
   	tile = tilelogic.getTile(38.539573,-105.999237, 14);
     expect(tile+"").toBe("3367,6288,14");
   })
 
-  it('tile from bounds in hemisphere -1,1 is correct', function(){
+  it('tile from lat lng in hemisphere -1,1 is correct', function(){
   	tile = tilelogic.getTile(-20.263566,57.506634, 14);
     expect(tile+"").toBe("10809,9134,14");
   })
 
-	it('tile from bounds in hemisphere -1,-1 is correct', function(){
+	it('tile from lat lng in hemisphere -1,-1 is correct', function(){
   	tile = tilelogic.getTile(-53.146564,-70.910279, 14);
     expect(tile+"").toBe("4964,11057,14");
-  })  
+  })
+
+  it('tiles from lat lng at map corners is correct', function(){
+    se = tilelogic.getTile(-85.05019204319093, 179.98472213745117, 14);
+    expect(se+"").toBe("16383,16383,14");
+
+    ne = tilelogic.getTile(85.05015501439495, 179.9897003173828, 14);
+    expect(ne+"").toBe("16383,0,14");
+
+    nw = tilelogic.getTile(85.050266099954, 180.0083255767822, 14);
+    expect(nw+"").toBe("0,0,14");
+
+    sw = tilelogic.getTile(-85.05019204319093, 180.0083255767822, 14);
+    expect(sw+"").toBe("0,16383,14");
+  })
 
 	it('descendant tiles with no max depth parameter are correct', function(){
   	tiles = tilelogic.getAllDescendantTiles(3368, 6288, 14);
@@ -158,6 +172,104 @@ describe('tilelogic', function(){
   	else{
   		console.log("spy.calls.count assertions not run!");
   	}
+  })
+
+  it('neighbor tiles are correct', function(){
+    var tile = tilelogic.getTile(38.556014, -106.062253, 14);
+
+    var north = tilelogic.getTileNorthOf(tile[0],tile[1],tile[2]);
+    expect(north+"").toBe("3364,6286,14");
+
+    var south = tilelogic.getTileSouthOf(tile[0],tile[1],tile[2]);
+    expect(south+"").toBe("3364,6288,14");
+
+    var east = tilelogic.getTileEastOf(tile[0],tile[1],tile[2]);
+    expect(east+"").toBe("3365,6287,14");
+
+    var west = tilelogic.getTileWestOf(tile[0],tile[1],tile[2]);
+    expect(west+"").toBe("3363,6287,14");
+
+  })
+
+  it('neighbor tiles at map\'s south east boundary are correct', function(){
+    var tile = tilelogic.getTile(-85.05019204319093, 179.98472213745117, 14);
+    
+    var north = tilelogic.getTileNorthOf(tile[0],tile[1],tile[2]);
+    expect(north+"").toBe("16383,16382,14");
+
+    var south = tilelogic.getTileSouthOf(tile[0],tile[1],tile[2]);
+    expect(south+"").toBe("16383,0,14");
+
+    var east = tilelogic.getTileEastOf(tile[0],tile[1],tile[2]);
+    expect(east+"").toBe("0,16383,14");
+
+    var west = tilelogic.getTileWestOf(tile[0],tile[1],tile[2]);
+    expect(west+"").toBe("16382,16383,14");
+
+  })
+
+  it('neighbor tiles at map\'s north east boundary are correct', function(){
+    var tile = tilelogic.getTile(85.05015501439495, 179.9897003173828, 14);
+    
+    var north = tilelogic.getTileNorthOf(tile[0],tile[1],tile[2]);
+    expect(north+"").toBe("16383,16383,14");
+
+    var south = tilelogic.getTileSouthOf(tile[0],tile[1],tile[2]);
+    expect(south+"").toBe("16383,1,14");
+
+    var east = tilelogic.getTileEastOf(tile[0],tile[1],tile[2]);
+    expect(east+"").toBe("0,0,14");
+
+    var west = tilelogic.getTileWestOf(tile[0],tile[1],tile[2]);
+    expect(west+"").toBe("16382,0,14");
+
+  })
+
+  it('neighbor tiles at map\'s north west boundary are correct', function(){
+    var tile = tilelogic.getTile(85.050266099954, 180.0083255767822, 14);
+    
+    var north = tilelogic.getTileNorthOf(tile[0],tile[1],tile[2]);
+    expect(north+"").toBe("0,16383,14");
+
+    var south = tilelogic.getTileSouthOf(tile[0],tile[1],tile[2]);
+    expect(south+"").toBe("0,1,14");
+
+    var east = tilelogic.getTileEastOf(tile[0],tile[1],tile[2]);
+    expect(east+"").toBe("1,0,14");
+
+    var west = tilelogic.getTileWestOf(tile[0],tile[1],tile[2]);
+    expect(west+"").toBe("16383,0,14");
+
+  })
+
+  it('neighbor tiles at map\'s south west boundary are correct', function(){
+    var tile = tilelogic.getTile(-85.05019204319093, 180.0083255767822, 14);
+    
+    var north = tilelogic.getTileNorthOf(tile[0],tile[1],tile[2]);
+    expect(north+"").toBe("0,16382,14");
+
+    var south = tilelogic.getTileSouthOf(tile[0],tile[1],tile[2]);
+    expect(south+"").toBe("0,0,14");
+
+    var east = tilelogic.getTileEastOf(tile[0],tile[1],tile[2]);
+    expect(east+"").toBe("1,16383,14");
+
+    var west = tilelogic.getTileWestOf(tile[0],tile[1],tile[2]);
+    expect(west+"").toBe("16383,16383,14");
+
+  })
+
+  it('tiles in bounds for a span are correct', function(){
+    tiles = tilelogic.tilesInBounds(38.556014, -106.062253, 38.508477, -105.945695, 14);
+    expect(tiles.length).toBe(28);
+    expect(tiles[0]+"").toBe("3364,6287,14");
+    expect(tiles[27]+"").toBe("3370,6290,14");
+  })
+
+  it('tiles in bounds for a single tile are correct', function(){
+    tiles = tilelogic.tilesInBounds(38.556014, -106.062253, 38.555, -106.0621, 14);
+    expect(tiles.length).toBe(1);
+    expect(tiles[0]+"").toBe("3364,6287,14");
   })
 
 })
