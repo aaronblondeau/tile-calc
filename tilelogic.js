@@ -131,7 +131,10 @@
 
 				tiles.push(current);
 				
-				current = this.getTileEastOf(current[0], current[1], current[2]);
+				//if nw == ne, we have something that is only one column wide, so don't go east
+				if(nw+"" != ne+""){
+					current = this.getTileEastOf(current[0], current[1], current[2]);
+				}
 
 				//check if we have reached right side
 				if(current+"" == row_end+""){
