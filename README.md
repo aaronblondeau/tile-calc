@@ -24,7 +24,7 @@ tile-calc represents each tile as an array of numbers : [x, y, z]
 
 Get latitude and longitude bounds for a tile
 
-    TileCalc.getTileBounds(3368, 6288, 14, 5, 15);
+    TileCalc.getTileBounds(3368, 6288, 14);
 
 Get all the parents of a tile
 
