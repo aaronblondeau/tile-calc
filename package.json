@@ -1,22 +1,22 @@
 {
-  "name": "tilelogic",
-  "description": "JavaScript functions for working with map tiles.",
+  "name": "tile-calc",
+  "description": "JavaScript functions for working with slippy map tiles.",
   "keywords": [
     "map",
     "tile",
     "open street map",
     "leaflet"
   ],
-  "version": "0.1.0",
-  "homepage": "https://github.com/aaronblondeau/tilelogic",
+  "version": "1.0.0",
+  "homepage": "https://github.com/aaronblondeau/tile-calc",
   "author": "Aaron Blondeau (http://www.salidasoftware.com/)",
   "contributors": [],
   "license": "MIT",
   "dependencies": {},
-  "main": "tilelogic.js",
+  "main": "tile-calc.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aaronblondeau/tilelogic.git"
+    "url": "https://github.com/aaronblondeau/tile-calc.git"
   },
   "engines": {
     "node": "*"
@@ -24,13 +24,14 @@
   "files": [
     "README.md",
     "LICENSE",
-    "tilelogic.js"
+    "tile-calc.js"
   ],
   "scripts": {
     "test": "./node_modules/.bin/jasmine-node ./test",
-    "build": "uglifyjs tilelogic.js -c 'evaluate=false' --comments '/ Copyright .*/' -m --source-map tilelogic-min.map -o tilelogic-min.js"
+    "build": "./node_modules/.bin/uglifyjs tile-calc.js -c 'evaluate=false' --comments '/ Copyright .*/' -m --source-map tile-calc-min.map -o tile-calc-min.js"
   },
   "devDependencies": {
-    "jasmine-node": "~1.12.0"
+    "jasmine-node": "~1.12.0",
+    "uglifyjs": "^2.4.10"
   }
 }

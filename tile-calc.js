@@ -3,9 +3,9 @@
 (function() {
 
 	var root = this;
-    var previous_tilelogic = root.tilelogic;
+    var previous_TileCalc = root.TileCalc;
 
-	var tilelogic = {
+	var TileCalc = {
 
 		tile2lng: function(x, z) {
 		  return (x/Math.pow(2,z)*360-180);
@@ -259,19 +259,19 @@
 
 	};
 
-	tilelogic.noConflict = function() {
-	  root.tilelogic = previous_tilelogic
-	  return tilelogic
+	TileCalc.noConflict = function() {
+	  root.TileCalc = previous_TileCalc
+	  return TileCalc
 	}
 
 	if( typeof exports !== 'undefined' ) {
 		if( typeof module !== 'undefined' && module.exports ) {
-			exports = module.exports = tilelogic;
+			exports = module.exports = TileCalc;
 		}
-		exports.tilelogic = tilelogic;
+		exports.TileCalc = TileCalc;
 	} 
 	else {
-		root.tilelogic = tilelogic;
+		root.TileCalc = TileCalc;
 	}
 
 }).call(this);

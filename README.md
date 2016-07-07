@@ -1,4 +1,4 @@
-# tilelogic
+# tile-calc
 
 JavaScript functions for working with map tiles.  Designed to work in both node.js and web browsers.
 
@@ -8,34 +8,34 @@ JavaScript functions for working with map tiles.  Designed to work in both node.
 
 ### Node
 
-    npm install tilelogic
+    npm install tile-calc
 
 And in your code:
 
-    var tilelogic = require('tilelogic')
+    var TileCalc = require('tile-calc')
 
 ### Browser
 
-    <script type="text/javascript" src="../tilelogic.js"></script>
+    <script type="text/javascript" src="../tile-calc.js"></script>
 
 ## Tile Format
 
-tilelogic represents each tile as an array of numbers : [x, y, z]
+tile-calc represents each tile as an array of numbers : [x, y, z]
 
 ## Examples
 
 Get latitude and longitude bounds for a tile
 
-    tilelogic.getTileBounds(3368, 6288, 14, 5, 15);
+    TileCalc.getTileBounds(3368, 6288, 14, 5, 15);
 
 Get all the parents of a tile
 
-	tilelogic.getAllAncestorTiles(3368, 6288, 14);
+	TileCalc.getAllAncestorTiles(3368, 6288, 14);
 
 Get the direct children of a tile
 
-	tilelogic.getChildTiles(3368, 6288, 14);
+	TileCalc.getChildTiles(3368, 6288, 14);
 
 Get the entire family tree of a tile (from min zoom of 5 to max zoom of 15)
 
-	tilelogic.getAllRelatedTiles(3368, 6288, 14, 5, 15);
+	TileCalc.getAllRelatedTiles(3368, 6288, 14, 5, 15);
