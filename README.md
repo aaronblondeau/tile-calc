@@ -2,8 +2,6 @@
 
 JavaScript functions for working with map tiles.  Designed to work in both node.js and web browsers.
 
-[![Build Status](https://travis-ci.org/aaronblondeau/tilelogic.png?branch=master)](https://travis-ci.org/aaronblondeau/tilelogic)
-
 ## Installation
 
 ### Node
